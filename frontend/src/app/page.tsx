@@ -1,5 +1,5 @@
 import { User } from "lucide-react";
-import  Image  from "next/image";
+import Image from "next/image";
 import logo from "../assets/logo.svg";
 
 export default function Home() {
@@ -30,8 +30,36 @@ export default function Home() {
 
         {/* Hero */}
 
-        <div>
-          <Image src={logo} alt="logo" className="w-40 h-40"/>
+        <div className="space-y-5">
+          <Image src={logo} alt="logo" className="w-40 h-40" />
+          <div className="max-w-[420px] space-y-1">
+            <h1 className="  text-5xl font-bold leading-tight text-gray-50">
+              Sua cápsula do tempo
+            </h1>
+            <p className="text-lg leading-relaxed">
+              Colecione momentos marcantes da sua jornada e compartilhe (se
+              quiser) com o mundo!
+            </p>
+          </div>
+          <a
+            href=""
+            className="inline-block uppercase bg-green-500  rounded-full px-5 py-3 font-alt text-sm leading-none text-black hover:bg-green-700 transition-colors"
+          >
+            Cadastrar lembrança
+          </a>
+        </div>
+
+        {/* Footer */}
+        <div className="text-sm leading-relaxed text-gray-200">
+          Feito com 💜 por{" "}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.github.com/maiconlara"
+            className="underline hover:text-gray-100"
+          >
+            Maicon Lara
+          </a>
         </div>
       </div>
 
@@ -40,7 +68,7 @@ export default function Home() {
         <div className="flex flex-1 items-center justify-center">
           <p className="text-center leading-relaxed w-[360px]">
             Você ainda não registrou nenhuma lembrança, começe a{" "}
-            <a href="" className="underline hover:text-gray-50">
+            <a href="" className="underline hover:text-gray-50 transition-colors">
               criar agora
             </a>
           </p>
