@@ -15,7 +15,7 @@ export default function Home() {
 
         {/* User */}
         <a
-          href=""
+          href={`https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}`}
           className="flex  items-center gap-3 text-left hover:text-gray-50 transition-colors"
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-400">
@@ -68,7 +68,10 @@ export default function Home() {
         <div className="flex flex-1 items-center justify-center">
           <p className="text-center leading-relaxed w-[360px]">
             Você ainda não registrou nenhuma lembrança, começe a{" "}
-            <a href="" className="underline hover:text-gray-50 transition-colors">
+            <a
+              href=""
+              className="underline hover:text-gray-50 transition-colors"
+            >
               criar agora
             </a>
           </p>
