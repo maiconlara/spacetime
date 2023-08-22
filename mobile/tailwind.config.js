@@ -46,6 +46,7 @@ module.exports = {
           900: "#025929",
         },
     },
+
   },
   plugins: [],
 }
