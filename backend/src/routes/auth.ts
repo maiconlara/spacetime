@@ -53,7 +53,7 @@ export async function authRoutes(app: FastifyInstance) {
 
     if(!user) {
         user = await prisma.user.create({
-            data:{
+            data:{  
                 githubId: id,
                 login: login,
                 name: name,
@@ -63,8 +63,17 @@ export async function authRoutes(app: FastifyInstance) {
         })
     }
 
+    const token  = app.jwt.sign({
+      name: user.name,
+      avatarUrl: user.avatarUrl,
+
+    }, {
+      sub: user.id,
+      expiresIn: '30 days',
+    })
+
     return {
-      user,
+      token,
     };
   });
 }
