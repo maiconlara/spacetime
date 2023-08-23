@@ -1,8 +1,13 @@
 import Signin from "@/components/LeftDiv/Signin";
 import Footer from "@/components/LeftDiv/Footer";
 import Hero from "@/components/LeftDiv/Hero";
+import Profile from "@/components/LeftDiv/Profile";
 
-const LeftDiv = () => {
+interface LeftDivProps {
+  isLogged: boolean;
+}
+
+const LeftDiv = ({ isLogged }: LeftDivProps) => {
   return (
     <div className="flex flex-col items-start justify-between px-28 py-16 relative overflow-hidden border-r border-white/10 bg-[url(../assets/stars.svg)] bg-cover">
       {/* Blur */}
@@ -11,7 +16,7 @@ const LeftDiv = () => {
       {/* Stripes */}
       <div className="absolute right-2 top-0 bottom-0 w-2 bg-stripes " />
 
-      <Signin />
+      {isLogged ? <Profile /> : <Signin />}
       <Hero />
       <Footer />
     </div>
