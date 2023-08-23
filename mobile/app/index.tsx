@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { View, ImageBackground, Text, TouchableOpacity } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import { useRouter } from "expo-router";
 
 import {
   useFonts,
@@ -8,13 +9,13 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 import { BaiJamjuree_700Bold } from "@expo-google-fonts/bai-jamjuree";
-import blugBr from "./src/assets/blur-bg.png";
-import Stripes from "./src/assets/stripes.svg";
-import NLWLogo from "./src/assets/logo.svg";
+import blugBr from "../src/assets/blur-bg.png";
+import Stripes from "../src/assets/stripes.svg";
+import NLWLogo from "../src/assets/logo.svg";
 import { styled } from "nativewind";
 import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
-import { useEffect, useState } from "react";
-import { api } from "./src/lib/api";
+import { useEffect } from "react";
+import { api } from "../src/lib/api";
 
 const StyledStrypes = styled(Stripes);
 const discovery = {
@@ -25,6 +26,8 @@ const discovery = {
 };
 
 export default function App() {
+  const router = useRouter();
+
   const [isLoadedFonts] = useFonts({
     Roboto_400Regular,
     Roboto_700Bold,
@@ -42,18 +45,20 @@ export default function App() {
     discovery
   );
 
+  const handleGithubAuth = async (code: string) => {
+    const response = await api.post("/register", {
+      code,
+    });
+
+    const { token } = response.data;
+    await SecureStore.setItemAsync("token", token);
+    router.push('/memories')
+  };
+
   useEffect(() => {
     if (response?.type === "success") {
       const { code } = response.params;
-      console.log("code: ", code);
-
-      api.post("/register", {
-          code,
-        })
-        .then((response) => {
-          const { token } = response.data;
-          SecureStore.setItemAsync("token", token);
-        });
+      handleGithubAuth(code);
     }
   }, [response]);
 
