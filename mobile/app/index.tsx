@@ -1,23 +1,12 @@
-import { StatusBar } from "expo-status-bar";
-import { View, ImageBackground, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useRouter } from "expo-router";
 
-import {
-  useFonts,
-  Roboto_400Regular,
-  Roboto_700Bold,
-} from "@expo-google-fonts/roboto";
-import { BaiJamjuree_700Bold } from "@expo-google-fonts/bai-jamjuree";
-import blugBr from "../src/assets/blur-bg.png";
-import Stripes from "../src/assets/stripes.svg";
 import NLWLogo from "../src/assets/logo.svg";
-import { styled } from "nativewind";
 import { useAuthRequest, makeRedirectUri } from "expo-auth-session";
 import { useEffect } from "react";
 import { api } from "../src/lib/api";
 
-const StyledStrypes = styled(Stripes);
 const discovery = {
   authorizationEndpoint: "https://github.com/login/oauth/authorize",
   tokenEndpoint: "https://github.com/login/oauth/access_token",
@@ -27,12 +16,6 @@ const discovery = {
 
 export default function App() {
   const router = useRouter();
-
-  const [isLoadedFonts] = useFonts({
-    Roboto_400Regular,
-    Roboto_700Bold,
-    BaiJamjuree_700Bold,
-  });
 
   const [request, response, signIn] = useAuthRequest(
     {
@@ -52,7 +35,7 @@ export default function App() {
 
     const { token } = response.data;
     await SecureStore.setItemAsync("token", token);
-    router.push('/memories')
+    router.push("/memories");
   };
 
   useEffect(() => {
@@ -62,22 +45,8 @@ export default function App() {
     }
   }, [response]);
 
-  if (!isLoadedFonts) {
-    return null;
-  }
-
   return (
-    <ImageBackground
-      alt="blur"
-      source={blugBr}
-      className="relative flex-1 bg-gray-900 items-center py-10"
-      imageStyle={{
-        position: "absolute",
-        left: "-100%",
-      }}
-    >
-      <StyledStrypes className="absolute left-2" />
-
+    <View className=" flex-1 items-center px-8 py-10">
       <View className="flex-1 items-center justify-center gap-6">
         <NLWLogo />
         <View className="space-y-2">
@@ -99,11 +68,10 @@ export default function App() {
           </Text>
         </TouchableOpacity>
       </View>
+
       <Text className="text-center font-body leading-relaxed text-gray-200">
         Feito com 💜 por Maicon Lara
       </Text>
-
-      <StatusBar style="light" translucent />
-    </ImageBackground>
+    </View>
   );
 }
