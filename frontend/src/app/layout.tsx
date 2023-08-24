@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+import LeftDiv from "@/components/LeftDiv";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Bai_Jamjuree as Bai, Roboto_Flex as Roboto } from "next/font/google";
@@ -16,12 +18,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const isLogged = cookies().has("token");
   return (
     <html lang="en">
       <body
         className={`${roboto.variable} ${bai.variable} font-sans text-gray-100 bg-gray-900`}
       >
-        {children}
+        <main className="grid grid-cols-2 h-screen ">
+          <LeftDiv isLogged={isLogged} />
+          <div className="flex h-full max-h-screen flex-col overflow-y-scroll bg-[url(../assets/stars.svg)] bg-cover">
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   );
