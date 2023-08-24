@@ -22,12 +22,17 @@ const NewMemory = () => {
             Anexar mídia
           </label>
 
-          <label htmlFor="
-          isPublic" className=""></label>
+          <label
+            htmlFor="
+          isPublic"
+            className="flex items-center gap-1.5 text-sm text-gray-200 hover:text-gray-100"
+          >
+            <input type="checkbox" name="isPublic" id="isPublic" value="true" />
+            Tornar memória pública 
+          </label>
         </div>
 
-
-        <input type="file" id="media" className="invisible" /> 
+        <input type="file" id="media" className="invisible" />
       </form>
     </div>
   );
