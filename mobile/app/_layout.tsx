@@ -24,13 +24,13 @@ export default function Layout() {
     Roboto_700Bold,
     BaiJamjuree_700Bold,
   });
-
+  
   useEffect(() => {
     SecureStore.getItemAsync("token").then((token) => {
       setIsUserAuth(!!token);
     });
   }, []);
-
+  
   if (!isLoadedFonts) {
     return <SplashScreen />;
   }
@@ -54,7 +54,8 @@ export default function Layout() {
         }}
       >
         <Stack.Screen name="index" redirect={isUserAuth} />
-        <Stack.Screen name="memories"  />
+        <Stack.Screen name="new" />
+        <Stack.Screen name="memories" />
       </Stack>
     </ImageBackground>
   );
