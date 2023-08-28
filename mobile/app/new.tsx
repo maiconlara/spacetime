@@ -1,15 +1,78 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import * as SecureStore from "expo-secure-store";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  Image,
+  Switch,
+} from "react-native";
 import NLWLogo from "../src/assets/logo.svg";
-import { Link } from "expo-router";
 import Icon from "@expo/vector-icons/Feather";
+import { Link, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Switch } from "react-native";
+import { api } from "../src/lib/api";
 
 export default function NewMemory() {
   const { bottom, top } = useSafeAreaInsets();
+  const router = useRouter();
   const [isPublic, setIsPublic] = useState(false);
+  const [content, setContent] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
 
+  const openImagePicker = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        selectionLimit: 1,
+      });
+      if (result.assets) {
+        setPreview(result.assets[0].uri);
+      }
+    } catch (err) {}
+  };
+
+  const handleNewMemory = async () => {
+    const token = await SecureStore.getItemAsync("token");
+    let coverUrl = "";
+
+    if (preview) {
+      const uploadFormData = new FormData();
+
+      uploadFormData.append("file", {
+        uri: preview,
+        name: "image.jpg",
+        type: "image/jpeg",
+      } as any);
+
+      const uploadResponse = await api.post("/upload", uploadFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      coverUrl = uploadResponse.data.fileUrl;
+    }
+
+    await api.post(
+      "/memories",
+      {
+        content,
+        isPublic,
+        coverUrl,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    router.push('/memories');
+  };
   return (
     <ScrollView
       className="flex-1 px-8 mb-4"
@@ -43,26 +106,41 @@ export default function NewMemory() {
           </Text>
         </View>
 
-        <TouchableOpacity activeOpacity={0.6} className="h-32 items-center justify-center rounded-lg border border-dashed border-gray-500 bg-black/20">
+        <TouchableOpacity
+          onPress={openImagePicker}
+          activeOpacity={0.6}
+          className="h-32 items-center justify-center rounded-lg border border-dashed border-gray-500 bg-black/20"
+        >
+          {preview ? (
+            <Image
+              source={{
+                uri: preview,
+              }}
+              className="h-full w-full rounded-lg object-cover"
+            />
+          ) : (
             <View className="flex-row items-center gap-2">
-                <Icon name="image"color={"#fff"} /> 
-                <Text className="font-body text-sm text-gray-200">Adicionar foto ou vídeo de capa</Text>
+              <Icon name="image" color={"#fff"} />
+              <Text className="font-body text-sm text-gray-200">
+                Adicionar foto ou vídeo de capa
+              </Text>
             </View>
+          )}
         </TouchableOpacity>
         <TextInput
-            multiline
-            className="p-0 font-body text-lg text-gray-50"
-            placeholderTextColor={"#56565a"}
-            placeholder="Sinta-se à vontade para adicionar fotos, vídeos e relatos sobre essa experiência que você quer lembrar para sempre."
-
-         />
-          <TouchableOpacity
+          value={content}
+          onChangeText={setContent}
+          multiline
+          className="p-0 font-body text-lg text-gray-50"
+          placeholderTextColor={"#56565a"}
+          placeholder="Sinta-se à vontade para adicionar fotos, vídeos e relatos sobre essa experiência que você quer lembrar para sempre."
+        />
+        <TouchableOpacity
+          onPress={handleNewMemory}
           activeOpacity={0.6}
           className="rounded-full mt-6 items-center self-end bg-green-500 px-5 py-2"
         >
-          <Text className="font-alt text-sm uppercase text-black">
-            Salvar
-          </Text>
+          <Text className="font-alt text-sm uppercase text-black">Salvar</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
