@@ -4,21 +4,39 @@ import { Camera } from "lucide-react";
 import MediaPicker from "../MediaPicker";
 import { FormEvent } from "react";
 import { api } from "@/lib/api";
+import Cookie from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const NewMemoryForm = () => {
+  const router = useRouter();
+  const token = Cookie.get("token");
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
     const uploadedFile = formData.get("coverUrl");
-
+    let coverUrl;
     if (uploadedFile) {
       const uploadFormData = new FormData();
       uploadFormData.set("file", uploadedFile);
       const uploadResponse = await api.post("/upload", uploadFormData);
 
-      console.log(uploadResponse.data);
+      coverUrl = uploadResponse.data.fileUrl;
     }
+    await api.post(
+      "/memories",
+      {
+        coverUrl,
+        content: formData.get("content"),
+        isPublic: formData.get("isPublic"),
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    router.push("/");
   };
 
   return (
