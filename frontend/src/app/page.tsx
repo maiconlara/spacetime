@@ -1,6 +1,5 @@
-import LeftDiv from "@/components/LeftDiv";
-import RightDiv from "@/components/RightDiv";
+import EmptyDiv from "@/components/EmptyDiv";
 
 export default function Home() {
-  return <RightDiv />;
+  return <EmptyDiv />;
 }
