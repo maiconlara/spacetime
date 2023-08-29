@@ -8,11 +8,16 @@ import * as SecureStore from "expo-secure-store";
 import { Link, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../src/lib/api";
+import dayjs from "dayjs";
+import ptBr from 'dayjs/locale/pt-br'
+
+dayjs.locale(ptBr);
 
 interface Memory {
   coverUrl: string;
   resume: string;
   id: string;
+  createdAt: string;
 }
 
 export default function memories() {
@@ -72,7 +77,7 @@ export default function memories() {
           <View className="flex-row items-center gap-2">
             <View className="h-px w-5 bg-gray-100" />
             <Text className="text-xsm text-gray-100 font-body">
-              28 de Junho, 2001
+              {dayjs(memory.createdAt).format("DD[ de ]MMMM[, ]YYYY")}
             </Text>
           </View>
           <View className="space-y-4">
