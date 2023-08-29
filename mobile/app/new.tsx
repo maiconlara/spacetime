@@ -75,7 +75,7 @@ export default function NewMemory() {
   };
   return (
     <ScrollView
-      className="flex-1 px-8 mb-4"
+      className="flex-1 px-6 mb-4"
       contentContainerStyle={{
         paddingBottom: bottom,
         paddingTop: top,
