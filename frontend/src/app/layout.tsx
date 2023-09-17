@@ -24,13 +24,20 @@ export default function RootLayout({
       <body
         className={`${roboto.variable} ${bai.variable} font-sans text-gray-100 bg-gray-900`}
       >
-        <main className="grid grid-cols-2 h-screen ">
+        <div className="md:hidden h-screen w-screen flex flex-col items-center justify-center">
+          <h1 className="text-lg font-bold">O App ainda não está disponível para Mobile!</h1>
+          <h1 className="text-lg font-bold">Peço desculpas</h1>
+        </div>
+        <main className="hidden md:grid md:grid-cols-2 h-screen ">
           <LeftDiv isLogged={isLogged} />
           <div className="flex h-full max-h-screen flex-col overflow-y-scroll bg-[url(../assets/stars.svg)] bg-cover">
             {children}
           </div>
         </main>
+
       </body>
+
+
     </html>
   );
 }
